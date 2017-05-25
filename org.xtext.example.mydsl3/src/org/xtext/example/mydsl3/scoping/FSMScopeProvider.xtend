@@ -27,6 +27,9 @@ class FSMScopeProvider extends AbstractFSMScopeProvider {
 		if (object instanceof Transition) {
 			scope_Transition_target(object as Transition, ref)
 		}
+		else{
+			super.getScope(object, ref)
+		}
 	}
 
 
