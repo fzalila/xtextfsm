@@ -1,0 +1,14 @@
+EnumerationType tt literals ( aa , bb ) 
+
+FSM { 
+	type tt 
+	State
+		{ 
+			literal tt.aa 
+			transitions ( to tt.bb )
+		}
+	State
+		{ literal tt.bb 
+			transitions ( to tt.aa )
+		} 
+}         
