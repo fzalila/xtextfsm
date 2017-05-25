@@ -1,0 +1,46 @@
+grammar org.xtext.example.mydsl3.FSM with org.eclipse.xtext.common.Terminals
+
+generate fSM "http://www.xtext.org/example/mydsl3/FSM"
+
+Model:
+	types+=EnumerationType*
+	fsm+=FSM*
+	;
+	
+FSM:
+	'FSM'
+	'{'
+		'type' type=[EnumerationType|QualifiedID]
+		ownedState+=State*
+	'}';
+
+State:
+	'State'
+	'{'
+		('literal' literal=[EnumerationLiteral|QualifiedID])
+		('transitions' '(' (outgoingTransition+=Transition)* ')')?
+	'}';
+
+Transition returns Transition:		
+		'to' target=[State|QualifiedID]
+	;
+	
+
+EnumerationType:
+	'EnumerationType'
+	name=ID
+	'literals'
+	'('	
+		  literals+=EnumerationLiteral ( "," literals+=EnumerationLiteral)* 
+	')';
+					
+EnumerationLiteral:
+	name=ID
+	;
+	
+QualifiedID : (ID | QUALIFIED_ID ) ;
+
+
+terminal QUALIFIED_ID : 
+  '^'?('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'|'0'..'9')*  '.' ('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'|'0'..'9')* ( '.' ('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'|'0'..'9')* )*;
+	
