@@ -1,14 +1,14 @@
-EnumerationType tt literals ( aa , bb ) 
+EnumerationType enum1 literals ( literal1 , literal2 ) 
 
 FSM { 
-	type tt 
+	type enum1      
 	State
 		{ 
-			literal tt.aa 
-			transitions ( to tt.bb )
+			literal enum1.literal1  
+			transitions ( to  enum1.literal2  )
 		}
-	State
-		{ literal tt.bb 
-			transitions ( to tt.aa )
-		} 
-}         
+	State   
+		{ literal enum1.literal2 
+			transitions ( to enum1.literal1 ) 
+		}  
+}                   

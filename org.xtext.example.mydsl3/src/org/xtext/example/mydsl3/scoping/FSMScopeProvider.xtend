@@ -34,16 +34,18 @@ class FSMScopeProvider extends AbstractFSMScopeProvider {
 
 
 	def scope_Transition_target(Transition transition, EReference reference) {
+		println("2")
 		var ArrayList<IEObjectDescription> res = new ArrayList<IEObjectDescription>
 		var State s = transition.eContainer as State
 		var FSM fsm = s.eContainer as FSM
 		for (state : fsm.ownedState) {
 			res.add(
 				EObjectDescription.create(
-					QualifiedName.create((state.literal.eContainer as EnumerationType).name, state.literal.name),
-					state.literal))
+					QualifiedName.create((state.literal.eContainer as EnumerationType).name, state.literal.name), state.literal))
+			println("type name " + (state.literal.eContainer as EnumerationType).name)
+			println("state literal name " + state.literal.name)
 			}
-			// println("res " + res)
+			
 			return new SimpleScope(IScope.NULLSCOPE, res)
 		}
 

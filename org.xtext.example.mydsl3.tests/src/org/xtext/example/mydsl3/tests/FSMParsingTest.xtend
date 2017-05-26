@@ -11,6 +11,12 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.xtext.example.mydsl3.fSM.Model
+import org.eclipse.emf.ecore.EPackage
+import org.xtext.example.mydsl3.fSM.FSMPackage
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.common.util.URI
+import java.io.ByteArrayOutputStream
+import java.nio.charset.StandardCharsets
 
 @RunWith(XtextRunner)
 @InjectWith(FSMInjectorProvider)
@@ -20,10 +26,41 @@ class FSMParsingTest {
 	
 	@Test
 	def void loadModel() {
+		EPackage.Registry.INSTANCE.put(FSMPackage.eNS_URI, FSMPackage::eINSTANCE)
 		val result = parseHelper.parse('''
-			Hello Xtext!
+			EnumerationType enum1 literals ( literal1 , literal2 ) 
+			FSM { 
+				type enum1      
+				State
+					{ 
+						literal enum1.literal1  
+						transitions ( to  enum1.literal2  )
+					}
+				State   
+					{ literal enum1.literal2 
+						transitions ( to enum1.literal1 ) 
+					}  
+			}                   
 		''')
 		Assert.assertNotNull(result)
 		Assert.assertTrue(result.eResource.errors.isEmpty)
+//		println(result)
+//		println('''
+//		«FOR s : result.fsm»
+//			«s.type»: 
+//«««			«FOR t : s.outgoingTransition»
+//«««				«t.target.name»
+//«««			«ENDFOR»
+//«««			«s.name»: «s.incomingTransition»
+//		«ENDFOR»
+//		''')
+//		
+		val RS2 = new ResourceSetImpl
+		val r2 = RS2.createResource(URI.createURI("dummy.xmi"))
+		r2.contents.add(result)
+		val baos = new ByteArrayOutputStream
+		r2.save(baos, null)
+		println(new String(baos.toByteArray, StandardCharsets.UTF_8))
 	}
-}
+	}
+
